@@ -60,7 +60,7 @@ app.get('/orders', async(req, res)=>{
     res.send(orders);
 })
 
-          // ADD ORDERS API
+  // ADD ORDERS API
     app.post('/orders', async(req, res)=>{
         const order = req.body;
         const result = await orderCollection.insertOne(order);
@@ -68,15 +68,22 @@ app.get('/orders', async(req, res)=>{
     })
 
 
+// DELETE ANYONE'S ORDER API
+app.delete('/orders/:id', async(req, res)=>{
+    const id = req.params.id;
+    const query = {_id: ObjectId(id)};
+    const result = await orderCollection.deleteOne(query);
+    res.json(result);
+})
 
 
     // Cancel MY ORDER API
-app.delete('/foods/:id', async(req,res)=>{
-    const id= req.params.id;
-    const query= {_id:ObjectId(id)};
-    const result = await foodCollections.deleteOne(query);
-    res.json(result);
-})
+// app.delete('/foods/:id', async(req,res)=>{
+//     const id= req.params.id;
+//     const query= {_id:ObjectId(id)};
+//     const result = await foodCollections.deleteOne(query);
+//     res.json(result);
+// })
 
 // GET MY ORDERS API
 app.get('/myOrders', async(req, res)=>{
@@ -104,11 +111,26 @@ app.get('/myOrders/:email', async(req,res)=>{
 
 })
 
+// GET DELETE API
+app.get('/delete', async(req, res)=>{
+    const cursor = myOrderCollection.find({});
+    const orders = await cursor.toArray();
+    res.send(orders);
+})
+
+
+// ADD DELETE API
+app.post('/delete',(req, res)=>{
+    console.log(req.body);
+    myOrderCollection.insertOne(req.body).then((result)=>{
+       res.send(result);
+    })
+})
 
 
 
 // DELETE MY ORDER API
-app.delete('/myOrders/:id', async(req, res)=>{
+app.delete('/delete/:id', async(req, res)=>{
     const id = req.params.id;
     console.log(id);
     const query = {_id: ObjectId(id)};
@@ -120,13 +142,6 @@ app.delete('/myOrders/:id', async(req, res)=>{
 
 
 
-// DELETE ANYONE'S ORDER API
-app.delete('/orders/:id', async(req, res)=>{
-    const id = req.params.id;
-    const query = {_id: ObjectId(id)};
-    const result = await orderCollection.deleteOne(query);
-    res.json(result);
-})
 
     }
 
